@@ -1,0 +1,30 @@
+# Alternative docker-compose configuration for Windows
+# Use this if network_mode: host doesn't work on your Windows machine
+# Usage: docker-compose -f docker-compose.windows.yml up
+
+version: '3.8'
+
+services:
+  expo-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: stallledger-dev
+    ports:
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+    volumes:
+      # Mount project directory for live reload
+      - .:/app
+      # Separate volume for node_modules to prevent overwrite
+      - /app/node_modules
+    environment:
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+      - NODE_ENV=development
+    # Use bridge network (default) instead of host mode for Windows compatibility
+    # For physical device access, use tunnel mode: docker-compose exec expo-dev npx expo start --tunnel
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+

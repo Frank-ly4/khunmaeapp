@@ -1,0 +1,43 @@
+# Dependencies (will be installed in container)
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Expo build artifacts
+.expo
+.expo-shared
+dist
+web-build
+
+# Development files
+.git
+.gitignore
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation (optional - comment out if you want docs in image)
+docs
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Test files (if any)
+coverage
+.nyc_output
+

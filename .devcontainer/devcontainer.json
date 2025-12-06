@@ -1,0 +1,47 @@
+{
+  "name": "StallLedger Development",
+  "image": "node:18-alpine",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    },
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "postCreateCommand": "npm ci",
+  "forwardPorts": [19000, 19001, 19002],
+  "portsAttributes": {
+    "19000": {
+      "label": "Expo Metro Bundler",
+      "onAutoForward": "notify"
+    },
+    "19001": {
+      "label": "Expo DevTools",
+      "onAutoForward": "notify"
+    },
+    "19002": {
+      "label": "Expo Web",
+      "onAutoForward": "notify"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next",
+        "expo.vscode-expo-tools"
+      ],
+      "settings": {
+        "typescript.tsdk": "node_modules/typescript/lib",
+        "typescript.enablePromptUseWorkspaceTsdk": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+      }
+    }
+  },
+  "remoteUser": "node",
+  "mounts": [
+    "source=${localWorkspaceFolder}/node_modules,target=/workspaces/${localWorkspaceFolderBasename}/node_modules,type=volume"
+  ]
+}
+
