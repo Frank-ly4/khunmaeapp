@@ -5,10 +5,13 @@ import { useNavigation } from '@react-navigation/native';
 import { usePurchases } from '../hooks/usePurchases';
 import { formatCurrency } from '../utils/currency';
 import { formatDate } from '../utils/dateHelpers';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translate } from '../i18n';
 
 export default function PurchasesScreen() {
   const navigation = useNavigation();
   const { purchases, loading, error, refetch } = usePurchases();
+  const { language } = useLanguage();
 
   if (loading && purchases.length === 0) {
     return (
@@ -26,7 +29,7 @@ export default function PurchasesScreen() {
         <Box p={4}>
           <HStack justifyContent="space-between" alignItems="center" mb={4}>
             <Text fontSize="2xl" fontWeight="bold" color="gray.800">
-              Stock Purchases
+              {translate('purchases.title', language)}
             </Text>
             <HStack space={2}>
               <Button
@@ -35,14 +38,14 @@ export default function PurchasesScreen() {
                 variant="outline"
                 onPress={() => navigation.navigate('OverheadsList' as never)}
               >
-                Overheads
+                {translate('overheads.title', language)}
               </Button>
               <Button
                 colorScheme="primary"
                 size="sm"
                 onPress={() => navigation.navigate('PurchaseForm' as never)}
               >
-                Add Purchase
+                {translate('purchases.add', language)}
               </Button>
             </HStack>
           </HStack>

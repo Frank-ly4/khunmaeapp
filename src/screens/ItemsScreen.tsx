@@ -4,6 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useItems, useDeleteItem } from '../hooks/useItems';
 import { useNavigation } from '@react-navigation/native';
 import { formatCurrency } from '../utils/currency';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translate } from '../i18n';
 
 export default function ItemsScreen() {
   const navigation = useNavigation();
@@ -11,6 +13,7 @@ export default function ItemsScreen() {
   const { deleteItem } = useDeleteItem();
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
   const [itemToDelete, setItemToDelete] = React.useState<string | null>(null);
+  const { language } = useLanguage();
 
   const handleDelete = async () => {
     if (itemToDelete) {
@@ -46,14 +49,14 @@ export default function ItemsScreen() {
         <Box p={4}>
           <HStack justifyContent="space-between" alignItems="center" mb={4}>
             <Text fontSize="2xl" fontWeight="bold" color="gray.800">
-              Items
+              {translate('items.title', language)}
             </Text>
             <Button
               colorScheme="primary"
               size="sm"
               onPress={() => navigation.navigate('ItemForm' as never)}
             >
-              Add Item
+              {translate('items.add', language)}
             </Button>
           </HStack>
         </Box>
@@ -69,7 +72,7 @@ export default function ItemsScreen() {
         {items.length === 0 ? (
           <Box flex={1} justifyContent="center" alignItems="center" px={4}>
             <Text fontSize="lg" color="gray.500" textAlign="center">
-              No items yet.{'\n'}Add your first product to get started.
+              {translate('items.empty', language)}
             </Text>
           </Box>
         ) : (
@@ -103,7 +106,7 @@ export default function ItemsScreen() {
                         navigation.navigate('ItemForm' as never, { itemId: item.id } as never)
                       }
                     >
-                      Edit
+                      {translate('common.edit', language)}
                     </Button>
                     <Button
                       size="xs"
@@ -111,7 +114,7 @@ export default function ItemsScreen() {
                       colorScheme="danger"
                       onPress={() => openDeleteDialog(item.id)}
                     >
-                      Delete
+                      {translate('common.delete', language)}
                     </Button>
                   </VStack>
                 </HStack>

@@ -25,9 +25,10 @@
       },
       "package": "com.stallledger.app",
       "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {
@@ -40,7 +41,11 @@
           "photosPermission": "The app accesses your photos to let you add product images."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "736468a6-9842-4d3d-a356-7292cc88275f"
+      }
+    }
   }
 }
-

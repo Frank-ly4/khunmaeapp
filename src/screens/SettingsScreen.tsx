@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, VStack, FormControl, Input, Button, Divider, Spinner } from 'native-base';
+import { Box, Text, VStack, FormControl, Input, Button, Divider, Spinner, Select, CheckIcon } from 'native-base';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSettings } from '../hooks/useSettings';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translate } from '../i18n';
+import { buildPromptPayHelperString } from '../utils/promptpay';
 
 export default function SettingsScreen() {
   const { settings, loading, error, updateSettings } = useSettings();
+  const { language, setLanguage } = useLanguage();
   const [stallName, setStallName] = useState('');
   const [ownerName, setOwnerName] = useState('');
   const [currency, setCurrency] = useState('THB');
@@ -55,7 +59,7 @@ export default function SettingsScreen() {
       <Box flex={1} bg="gray.50" p={4}>
         <VStack space={4}>
           <Text fontSize="2xl" fontWeight="bold" color="gray.800">
-            Settings
+            {translate('settings.title', language)}
           </Text>
 
           {error && (
@@ -69,7 +73,7 @@ export default function SettingsScreen() {
           {saveSuccess && (
             <Box bg="success.100" p={3} rounded="md">
               <Text color="success.600" fontSize="sm">
-                Settings saved successfully!
+                {translate('settings.saveSuccess', language)}
               </Text>
             </Box>
           )}
@@ -78,29 +82,35 @@ export default function SettingsScreen() {
 
           <Box bg="white" p={4} rounded="md" shadow={1}>
             <Text fontSize="lg" fontWeight="600" mb={4}>
-              Stall Information
+              {translate('settings.section.stallInfo', language)}
             </Text>
             <VStack space={4}>
               <FormControl>
-                <FormControl.Label>Stall Name</FormControl.Label>
+                <FormControl.Label>
+                  {translate('settings.label.stallName', language)}
+                </FormControl.Label>
                 <Input
-                  placeholder="Enter stall name"
+                  placeholder={translate('settings.placeholder.stallName', language)}
                   value={stallName}
                   onChangeText={setStallName}
                 />
               </FormControl>
 
               <FormControl>
-                <FormControl.Label>Owner Name</FormControl.Label>
+                <FormControl.Label>
+                  {translate('settings.label.ownerName', language)}
+                </FormControl.Label>
                 <Input
-                  placeholder="Enter owner name"
+                  placeholder={translate('settings.placeholder.ownerName', language)}
                   value={ownerName}
                   onChangeText={setOwnerName}
                 />
               </FormControl>
 
               <FormControl>
-                <FormControl.Label>Currency</FormControl.Label>
+                <FormControl.Label>
+                  {translate('settings.label.currency', language)}
+                </FormControl.Label>
                 <Input value={currency} isReadOnly />
               </FormControl>
             </VStack>
@@ -108,21 +118,55 @@ export default function SettingsScreen() {
 
           <Box bg="white" p={4} rounded="md" shadow={1}>
             <Text fontSize="lg" fontWeight="600" mb={4}>
-              PromptPay (Optional)
+              {translate('settings.section.promptpay', language)}
             </Text>
             <VStack space={4}>
               <FormControl>
-                <FormControl.Label>PromptPay ID</FormControl.Label>
+                <FormControl.Label>
+                  {translate('settings.label.promptpayId', language)}
+                </FormControl.Label>
                 <Input
-                  placeholder="Phone number or ID"
+                  placeholder={translate('settings.placeholder.promptpayId', language)}
                   keyboardType="numeric"
                   value={promptpayId}
                   onChangeText={setPromptpayId}
                 />
               </FormControl>
               <Text fontSize="sm" color="gray.600">
-                Generate QR codes for payments (coming in Milestone 4)
+                {translate('settings.promptpay.helper', language)}
               </Text>
+              {promptpayId.trim().length > 0 && (
+                <Text fontSize="xs" color="gray.500" mt={1}>
+                  {buildPromptPayHelperString(promptpayId)}
+                </Text>
+              )}
+            </VStack>
+          </Box>
+
+          <Box bg="white" p={4} rounded="md" shadow={1}>
+            <Text fontSize="lg" fontWeight="600" mb={4}>
+              {translate('settings.section.language', language)}
+            </Text>
+            <VStack space={4}>
+              <FormControl>
+                <FormControl.Label>
+                  {translate('settings.label.language', language)}
+                </FormControl.Label>
+                <Select
+                  selectedValue={language}
+                  minWidth="200"
+                  accessibilityLabel={translate('settings.label.language', language)}
+                  placeholder={translate('settings.label.language', language)}
+                  _selectedItem={{
+                    bg: 'primary.100',
+                    endIcon: <CheckIcon size={4} />,
+                  }}
+                  onValueChange={(value) => setLanguage(value as 'en' | 'th')}
+                >
+                  <Select.Item label={translate('language.english', 'en')} value="en" />
+                  <Select.Item label={translate('language.thai', 'th')} value="th" />
+                </Select>
+              </FormControl>
             </VStack>
           </Box>
 
@@ -134,7 +178,7 @@ export default function SettingsScreen() {
             isLoading={saving}
             isDisabled={saving}
           >
-            Save Settings
+            {translate('settings.save', language)}
           </Button>
         </VStack>
       </Box>

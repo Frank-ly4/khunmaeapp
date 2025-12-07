@@ -4,7 +4,7 @@ let db: SQLite.SQLiteDatabase | null = null;
 
 export const getDatabase = (): SQLite.SQLiteDatabase => {
   if (!db) {
-    db = SQLite.openDatabase('stallledger.db');
+    db = SQLite.openDatabaseSync('stallledger.db');
   }
   return db;
 };

@@ -5,10 +5,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useOverheads } from '../hooks/useOverheads';
 import { formatCurrency } from '../utils/currency';
 import { formatDate } from '../utils/dateHelpers';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translate } from '../i18n';
 
 export default function OverheadsScreen() {
   const navigation = useNavigation();
   const { overheads, loading, error, refetch } = useOverheads();
+  const { language } = useLanguage();
 
   if (loading && overheads.length === 0) {
     return (
@@ -26,7 +29,7 @@ export default function OverheadsScreen() {
         <Box p={4}>
           <HStack justifyContent="space-between" alignItems="center" mb={4}>
             <Text fontSize="2xl" fontWeight="bold" color="gray.800">
-              Overhead Expenses
+              {translate('overheads.title', language)}
             </Text>
             <HStack space={2}>
               <Button
@@ -35,14 +38,14 @@ export default function OverheadsScreen() {
                 variant="outline"
                 onPress={() => navigation.navigate('PurchasesList' as never)}
               >
-                Purchases
+                {translate('purchases.title', language)}
               </Button>
               <Button
                 colorScheme="primary"
                 size="sm"
                 onPress={() => navigation.navigate('OverheadForm' as never)}
               >
-                Add Expense
+                {translate('overheads.add', language)}
             </Button>
             </HStack>
           </HStack>

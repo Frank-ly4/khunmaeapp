@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { LogBox } from 'react-native';
 import { NativeBaseProvider, Box, Spinner, Text } from 'native-base';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { theme } from './src/theme';
 import AppNavigator from './src/navigation/AppNavigator';
 import { initDatabase } from './src/db';
+import { LanguageProvider, useLanguage } from './src/contexts/LanguageContext';
+import LanguageSelectionScreen from './src/screens/LanguageSelectionScreen';
+
+// Suppress specific warnings
+LogBox.ignoreLogs([
+  'In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.',
+]);
 
 export default function App() {
   const [dbInitialized, setDbInitialized] = useState(false);
@@ -50,9 +58,28 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <NativeBaseProvider theme={theme}>
-        <AppNavigator />
+        <LanguageProvider>
+          <RootContent />
+        </LanguageProvider>
       </NativeBaseProvider>
     </SafeAreaProvider>
   );
 }
 
+function RootContent() {
+  const { loading, needsSelection } = useLanguage();
+
+  if (loading) {
+    return (
+      <Box flex={1} justifyContent="center" alignItems="center">
+        <Spinner size="lg" color="primary.500" />
+      </Box>
+    );
+  }
+
+  if (needsSelection) {
+    return <LanguageSelectionScreen />;
+  }
+
+  return <AppNavigator />;
+}

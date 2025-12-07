@@ -40,6 +40,10 @@ export const updateSettings = async (
     fields.push('promptpayId = ?');
     values.push(updates.promptpayId || null);
   }
+  if (updates.language !== undefined) {
+    fields.push('language = ?');
+    values.push(updates.language || null);
+  }
   
   if (fields.length === 0) {
     const existing = await getSettings();
@@ -90,18 +94,20 @@ export const initializeDefaultSettings = async (
     ownerName: overrides?.ownerName || '',
     currency: overrides?.currency || 'THB',
     promptpayId: overrides?.promptpayId,
+    language: overrides?.language,
   };
   
   return new Promise((resolve, reject) => {
     db.runAsync(
-      `INSERT INTO settings (id, stallName, ownerName, currency, promptpayId)
-       VALUES (?, ?, ?, ?, ?)`,
+      `INSERT INTO settings (id, stallName, ownerName, currency, promptpayId, language)
+       VALUES (?, ?, ?, ?, ?, ?)`,
       [
         defaultSettings.id,
         defaultSettings.stallName,
         defaultSettings.ownerName,
         defaultSettings.currency,
         defaultSettings.promptpayId || null,
+        defaultSettings.language || null,
       ]
     )
       .then(() => resolve(defaultSettings))

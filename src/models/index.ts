@@ -48,5 +48,6 @@ export interface Settings {
   ownerName: string;
   currency: string;
   promptpayId?: string;
+  language?: 'en' | 'th';
 }
 

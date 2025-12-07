@@ -5,10 +5,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useSales } from '../hooks/useSales';
 import { formatCurrency } from '../utils/currency';
 import { formatDateTime } from '../utils/dateHelpers';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translate } from '../i18n';
 
 export default function SalesScreen() {
   const navigation = useNavigation();
   const { sales, loading, error, refetch } = useSales();
+  const { language } = useLanguage();
 
   if (loading && sales.length === 0) {
     return (
@@ -26,14 +29,14 @@ export default function SalesScreen() {
         <Box p={4}>
           <HStack justifyContent="space-between" alignItems="center" mb={4}>
             <Text fontSize="2xl" fontWeight="bold" color="gray.800">
-              Sales Transactions
+              {translate('sales.title', language)}
             </Text>
             <Button
               colorScheme="primary"
               size="sm"
               onPress={() => navigation.navigate('SaleForm' as never)}
             >
-              Add Sale
+              {translate('sales.add', language)}
             </Button>
           </HStack>
         </Box>
@@ -49,6 +52,7 @@ export default function SalesScreen() {
         {sales.length === 0 ? (
           <Box flex={1} justifyContent="center" alignItems="center" px={4}>
             <Text fontSize="lg" color="gray.500" textAlign="center">
+              {/* Simplified message for now */}
               No sales recorded yet.{'\n'}Start logging transactions to track your revenue.
             </Text>
           </Box>

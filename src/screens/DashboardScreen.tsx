@@ -9,6 +9,8 @@ import {
 } from '../hooks/useDashboard';
 import ProfitTrendChart from '../components/ProfitTrendChart';
 import { formatCurrency } from '../utils/currency';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translate } from '../i18n';
 
 interface PeriodSummaryCardProps {
   title: string;
@@ -24,6 +26,7 @@ interface PeriodSummaryCardProps {
 }
 
 function PeriodSummaryCard({ title, summary, loading }: PeriodSummaryCardProps) {
+  const { language } = useLanguage();
   if (loading) {
     return (
       <Box bg="white" p={4} rounded="md" shadow={1}>
@@ -49,15 +52,15 @@ function PeriodSummaryCard({ title, summary, loading }: PeriodSummaryCardProps) 
       </Text>
       <VStack space={2}>
         <HStack justifyContent="space-between">
-          <Text color="gray.600">Revenue:</Text>
+          <Text color="gray.600">{translate('dashboard.revenue', language)}:</Text>
           <Text fontWeight="600">{formatCurrency(summary.totalRevenue)}</Text>
         </HStack>
         <HStack justifyContent="space-between">
-          <Text color="gray.600">COGS:</Text>
+          <Text color="gray.600">{translate('dashboard.cogs', language)}:</Text>
           <Text fontWeight="600">{formatCurrency(summary.totalCOGS)}</Text>
         </HStack>
         <HStack justifyContent="space-between">
-          <Text color="gray.600">Gross Profit:</Text>
+          <Text color="gray.600">{translate('dashboard.grossProfit', language)}:</Text>
           <Text fontWeight="600" color={summary.grossProfit >= 0 ? 'success.500' : 'danger.500'}>
             {formatCurrency(summary.grossProfit)}
           </Text>
@@ -68,14 +71,16 @@ function PeriodSummaryCard({ title, summary, loading }: PeriodSummaryCardProps) 
         </HStack>
         <Divider my={1} />
         <HStack justifyContent="space-between">
-          <Text color="gray.600" fontWeight="600">Net Profit:</Text>
+          <Text color="gray.600" fontWeight="600">
+            {translate('dashboard.netProfit', language)}:
+          </Text>
           <Text fontWeight="bold" fontSize="md" color={profitColor}>
             {formatCurrency(summary.netProfit)}
           </Text>
         </HStack>
         {summary.netMarginPercent !== null && (
           <HStack justifyContent="space-between">
-            <Text color="gray.600">Net Margin:</Text>
+            <Text color="gray.600">{translate('dashboard.netMargin', language)}:</Text>
             <Text fontWeight="600" color={marginColor}>
               {summary.netMarginPercent.toFixed(1)}%
             </Text>
@@ -93,6 +98,7 @@ export default function DashboardScreen() {
   const monthSummary = usePeriodSummary('month');
   const profitTrend = useDailyProfitTrend(7);
   const insights = useBestWorstInsights('month');
+  const { language } = useLanguage();
 
   const isLoading =
     todaySummary.loading || weekSummary.loading || monthSummary.loading || profitTrend.loading || insights.loading;
@@ -104,16 +110,28 @@ export default function DashboardScreen() {
           <VStack space={4}>
             <HStack justifyContent="space-between" alignItems="center">
               <Text fontSize="2xl" fontWeight="bold" color="gray.800">
-                Dashboard
+                {translate('dashboard.title', language)}
               </Text>
               {isLoading && <Spinner size="sm" color="primary.500" />}
             </HStack>
 
             <Divider />
 
-            <PeriodSummaryCard title="Today" summary={todaySummary.summary} loading={todaySummary.loading} />
-            <PeriodSummaryCard title="This Week" summary={weekSummary.summary} loading={weekSummary.loading} />
-            <PeriodSummaryCard title="This Month" summary={monthSummary.summary} loading={monthSummary.loading} />
+            <PeriodSummaryCard
+              title={translate('dashboard.today', language)}
+              summary={todaySummary.summary}
+              loading={todaySummary.loading}
+            />
+            <PeriodSummaryCard
+              title={translate('dashboard.thisWeek', language)}
+              summary={weekSummary.summary}
+              loading={weekSummary.loading}
+            />
+            <PeriodSummaryCard
+              title={translate('dashboard.thisMonth', language)}
+              summary={monthSummary.summary}
+              loading={monthSummary.loading}
+            />
 
             {profitTrend.data.length > 0 && (
               <ProfitTrendChart data={profitTrend.data} height={200} color="#2196f3" />
